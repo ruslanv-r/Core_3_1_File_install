@@ -19,7 +19,7 @@ public class Main {
 
         createDirectory(dirList, sb);
         createFiles(dirFiles, sb);
-        writeFiles("D:\\\\Games\\temp\\temp.txt", sb);
+        //writeFiles("D:\\\\Games\\temp\\temp.txt", sb);
 
 
         //Вторая задача - сохранение
@@ -28,17 +28,25 @@ public class Main {
         GameProgress gameProgress2 = new GameProgress(200, 20, 20, 2000);
         GameProgress gameProgress3 = new GameProgress(300, 30, 30, 3000);
         List<GameProgress> listGameProgress = Arrays.asList(gameProgress1, gameProgress2, gameProgress3);
+
         saveGameProgress(listGameProgress, sb);
         zipGameProgress("D:\\Games\\savegames\\output_save.zip", sb);
-         delGameProgress();
+        delGameProgress();
+
         gameProgress1 = new GameProgress(1, 1, 1, 1);
-        gameProgress2 = new GameProgress(1, 2, 2, 2);
-        gameProgress3 = new GameProgress(1, 3, 2, 3);
-        //Третья задача задача - загрузка
+        gameProgress2 = new GameProgress(2, 2, 2, 2);
+        gameProgress3 = new GameProgress(3, 3, 2, 3);
+        listGameProgress.set(0, gameProgress1);
+        listGameProgress.set(1, gameProgress2);
+        listGameProgress.set(2, gameProgress3);
+        System.out.println(listGameProgress);
+        //Третья задача задача - загрузка2
         unZipGameProgress();
         System.out.println(openProgress("D:\\Games\\savegames\\packed_save.dat"));
+       writeFiles("D:\\\\Games\\temp\\temp.txt", sb);
 
     }
+
     public static List<GameProgress> openProgress(String path) {
         List<GameProgress> gameProgress = null;
 
@@ -47,7 +55,7 @@ public class Main {
              ObjectInputStream ois = new ObjectInputStream(fis)) {
             // десериализуем объект и скастим его в класс
 
-            gameProgress = (List<GameProgress>)  ois.readObject();
+            gameProgress = (List<GameProgress>) ois.readObject();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -104,7 +112,7 @@ public class Main {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-
+        sb.append("Файл save.dat заархивирован\n");
     }
 
 
@@ -122,22 +130,22 @@ public class Main {
 //    }
 
     public static void saveGameProgress(List<GameProgress> listGameProgress, StringBuilder sb) {
-        for (GameProgress tmpGp : listGameProgress) {
-            System.out.println(listGameProgress);
-            try (FileOutputStream fos = new FileOutputStream("D:\\Games\\savegames\\save.dat", true);
-                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+        System.out.println(listGameProgress);
+        try (FileOutputStream fos = new FileOutputStream("D:\\Games\\savegames\\save.dat", true);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 // запишем экземпляр класса в файл
-                oos.writeObject(listGameProgress);
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
+            oos.writeObject(listGameProgress);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+
         }
+        sb.append("Экземпляры класса GameProgress сериализованы\n");
     }
 
     public static void writeFiles(String path, StringBuilder sb) {
         String text = sb.toString();
         //откроем байтовый поток записи в файл
-        try (FileOutputStream fos = new FileOutputStream(path)) {
+        try (FileOutputStream fos = new FileOutputStream(path,true)) {
             // переводстрокивмассивбайтов
             byte[] bytes = text.getBytes();
             // запись байтов в файл
