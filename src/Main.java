@@ -36,22 +36,24 @@ public class Main {
         gameProgress3 = new GameProgress(1, 3, 2, 3);
         //Третья задача задача - загрузка
         unZipGameProgress();
-        openProgress();
+        System.out.println(openProgress("D:\\Games\\savegames\\packed_save.dat"));
 
     }
-    public static void openProgress() {
-        GameProgress gameProgress = null;
+    public static List<GameProgress> openProgress(String path) {
+        List<GameProgress> gameProgress = null;
 
 
-        try (FileInputStream fis = new FileInputStream("D:\\Games\\savegames\\packed_save.dat");
+        try (FileInputStream fis = new FileInputStream(path);
              ObjectInputStream ois = new ObjectInputStream(fis)) {
             // десериализуем объект и скастим его в класс
-            gameProgress = (GameProgress) ois.readObject();
+
+            gameProgress = (List<GameProgress>)  ois.readObject();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
 
         System.out.println(gameProgress);
+        return gameProgress;
     }
 
 
@@ -106,13 +108,26 @@ public class Main {
     }
 
 
+//    public static void saveGameProgress(List<GameProgress> listGameProgress, StringBuilder sb) {
+//        for (GameProgress tmpGp : listGameProgress) {
+//            System.out.println(tmpGp);
+//            try (FileOutputStream fos = new FileOutputStream("D:\\Games\\savegames\\save.dat", true);
+//                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+//// запишем экземпляр класса в файл
+//                oos.writeObject(tmpGp);
+//            } catch (Exception ex) {
+//                System.out.println(ex.getMessage());
+//            }
+//        }
+//    }
+
     public static void saveGameProgress(List<GameProgress> listGameProgress, StringBuilder sb) {
         for (GameProgress tmpGp : listGameProgress) {
-            System.out.println(tmpGp);
-            try (FileOutputStream fos = new FileOutputStream("D:\\Games\\savegames\\save.dat");
+            System.out.println(listGameProgress);
+            try (FileOutputStream fos = new FileOutputStream("D:\\Games\\savegames\\save.dat", true);
                  ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 // запишем экземпляр класса в файл
-                oos.writeObject(tmpGp);
+                oos.writeObject(listGameProgress);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
