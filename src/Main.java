@@ -33,21 +33,15 @@ public class Main {
         zipGameProgress("D:\\Games\\savegames\\output_save.zip", sb);
         delGameProgress();
 
-        gameProgress1 = new GameProgress(1, 1, 1, 1);
-        gameProgress2 = new GameProgress(2, 2, 2, 2);
-        gameProgress3 = new GameProgress(3, 3, 2, 3);
-        listGameProgress.set(0, gameProgress1);
-        listGameProgress.set(1, gameProgress2);
-        listGameProgress.set(2, gameProgress3);
-        System.out.println(listGameProgress);
+
         //Третья задача задача - загрузка2
-        unZipGameProgress();
-        System.out.println(openProgress("D:\\Games\\savegames\\packed_save.dat"));
+        unZipGameProgress(sb);
+        System.out.println(openProgress("D:\\Games\\savegames\\packed_save.dat", sb));
        writeFiles("D:\\\\Games\\temp\\temp.txt", sb);
 
     }
 
-    public static List<GameProgress> openProgress(String path) {
+    public static List<GameProgress> openProgress(String path, StringBuilder sb) {
         List<GameProgress> gameProgress = null;
 
 
@@ -59,13 +53,13 @@ public class Main {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-
+        sb.append("Сохраненные данные загружены.\n");
         System.out.println(gameProgress);
         return gameProgress;
     }
 
 
-    public static void unZipGameProgress() {
+    public static void unZipGameProgress(StringBuilder sb) {
 
         try (ZipInputStream zin = new ZipInputStream(new FileInputStream("D:\\Games\\savegames\\output_save.zip"))) {
             ZipEntry entry;
@@ -85,6 +79,7 @@ public class Main {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+        sb.append("Файл save.dat разархивирован\n");
     }
 
     public static void delGameProgress() {
@@ -163,8 +158,8 @@ public class Main {
 
             try {
                 if (myFile.createNewFile()) {
-                    System.out.println("Файл " + dirFiles + " был создан");
-                    sb.append("Файл - " + dirFiles + " был создан\n");
+                    System.out.println("Файл " + tmpStr + " был создан");
+                    sb.append("Файл - " + tmpStr + " был создан\n");
                 }
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
